@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'; 
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner'; 
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -16,17 +17,23 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
         loading: false, 
+        error: false
     }
+    //Retrieve data from backend
+    componentDidMount() {
+        axios.get('https://react-burger-app-d20bc.firebaseio.com/ingredients.json')
+        .then(response => {
+            this.setState( {ingredients: response.data} ); 
+        })
+        .catch(error => {
+            this.setState({error: true});
+    }); 
+}
     updatePurchaseState(ingredients) {
         //const ingredients = {
           //  ...this.state.ingredients
@@ -113,26 +120,17 @@ class BurgerBuilder extends Component {
         const disabledInfor = {
             ...this.state.ingredients
         };
-        //Show spinner or OrderSummary? False or true?
-        let orderSummary = <OrderSummary 
-        ingredients= {this.state.ingredients}
-        cancelPurchase={this.cancelPurchaseHandler}
-        continuePurchase={this.continuePurchaseHandler}
-        price={this.state.totalPrice}
-        />
-        if (this.state.loading) {
-            orderSummary = <Spinner/> ; 
-        }
         //check true/ false, if true then disable the button
         //{salad: true; meat: false,...}
         for (let key in disabledInfor) {
             disabledInfor[key] = disabledInfor[key] <= 0
         }
-        return (
+        let orderSummary =  null; 
+        //Having burger when data from backend response, otherwiise app show Spinner
+        let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />
+        if (this.state.ingredients) {
+            burger = (
             <Aux>
-                <Modal show={this.state.purchasing} cancelPurchase={this.cancelPurchaseHandler}>
-                    {orderSummary}
-                </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls
                  ingredientAdded={this.addIngredientHandler}
@@ -143,8 +141,29 @@ class BurgerBuilder extends Component {
                  ordered={this.purchaseHandler}
                  />
             </Aux>
+            ); 
+            //Burger summary only show when there is response
+         orderSummary = <OrderSummary 
+            ingredients= {this.state.ingredients}
+            cancelPurchase={this.cancelPurchaseHandler}
+            continuePurchase={this.continuePurchaseHandler}
+            price={this.state.totalPrice}
+            />
+        }
+        //Show spinner or OrderSummary? False or true?
+        if (this.state.loading) {
+            orderSummary = <Spinner/> ; 
+        }
+        return (
+            <Aux>
+                <Modal show={this.state.purchasing} cancelPurchase={this.cancelPurchaseHandler}>
+                    {orderSummary}
+                </Modal>
+                {burger}
+                
+            </Aux>
         ); 
     }
 
 }
-export default BurgerBuilder; 
+export default withErrorHandler(BurgerBuilder, axios); 
