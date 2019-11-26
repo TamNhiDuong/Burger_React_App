@@ -38,6 +38,9 @@ class BurgerBuilder extends Component {
         //const ingredients = {
           //  ...this.state.ingredients
         //};
+        console.log('testing'); 
+        console.log(Object.keys(ingredients));
+        console.log(Object.keys(ingredients).map(igkey => {return ingredients[igkey]}));
         const sum = Object.keys(ingredients)
         .map(igkey => {
             return ingredients[igkey];
@@ -55,35 +58,48 @@ class BurgerBuilder extends Component {
         this.setState({purchasing: false});
     };
     continuePurchaseHandler = () => {
+        console.log("continueOrder props:",this.props); 
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            const encodedParams = encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]);
+            queryParams.push(encodedParams); 
+        }
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        }); 
+
         //Change loading to true as orderSummary is about to be shown
-        this.setState({loading: true})
+       // this.setState({loading: true})
         //alert("You are continuing!")
         //Sending data to Firebase, endpoint: /orders.json. In which 'orders' is random. 
         //order is data object
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Yang Yee',
-                address: {
-                    street: 'Kilonrinne 10 B36',
-                    zipCode: '02610',
-                    country: 'Finland'
-                },
-                email: 'a1801032@myy.haaga-helia.fi'
-            },
-            deliveryMethod: 'Foodora'
-        }
-        axios.post('/orders.json', order)
-        .then( response => {
-            this.setState({loading: false, purchasing: false});
-        })
-        .catch(error =>{
-            this.setState({loading: false, purchasing: false});
-        });
+       // const order = {
+          //  ingredients: this.state.ingredients,
+           // price: this.state.totalPrice,
+           // customer: {
+             //   name: 'Yang Yee',
+              //  address: {
+               //     street: 'Kilonrinne 10 B36',
+              //      zipCode: '02610',
+               //     country: 'Finland'
+               // },
+               // email: 'a1801032@myy.haaga-helia.fi'
+           // },
+           // deliveryMethod: 'Foodora'
+        //}
+        //axios.post('/orders.json', order)
+        //.then( response => {
+           // this.setState({loading: false, purchasing: false});
+       // })
+       // .catch(error =>{
+         //   this.setState({loading: false, purchasing: false});
+       // });
     }
 
     addIngredientHandler = (type) => {
+        console.log(type); 
         const oldCount = this.state.ingredients[type];
         const updatedCount = oldCount + 1;
         const updatedIngredients ={
