@@ -5,22 +5,13 @@ import {NavLink} from 'react-router-dom';
 
 const navigationItems = () => (
     <ul className={classes.NavigationItems}>
-        <NavLink 
-         to='/burger' 
-         exact
-         active>
         <NavigationItem link="/">
             BurgerBuilder
         </NavigationItem>
-         </NavLink>
 
-         <NavLink
-         to='/checkout'
-         active>
          <NavigationItem link="/">
             Checkout
         </NavigationItem>
-         </NavLink>
     </ul>
 
 );

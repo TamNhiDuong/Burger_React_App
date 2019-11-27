@@ -1,7 +1,6 @@
 import React from 'react';
 import Burger from '../../Burger/Burger'; 
 import Button from '../../UI/Button/Button'; 
-import {Link} from 'react-router-dom'; 
 
 import classes from '../CheckoutSum/CheckoutSum.module.css'; 
 
