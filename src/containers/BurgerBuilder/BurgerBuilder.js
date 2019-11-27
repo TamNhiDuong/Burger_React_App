@@ -72,33 +72,6 @@ class BurgerBuilder extends Component {
             pathname: '/checkout',
             search: '?' + queryString
         }); 
-
-        //Change loading to true as orderSummary is about to be shown
-       // this.setState({loading: true})
-        //alert("You are continuing!")
-        //Sending data to Firebase, endpoint: /orders.json. In which 'orders' is random. 
-        //order is data object
-       // const order = {
-          //  ingredients: this.state.ingredients,
-           // price: this.state.totalPrice,
-           // customer: {
-             //   name: 'Yang Yee',
-              //  address: {
-               //     street: 'Kilonrinne 10 B36',
-              //      zipCode: '02610',
-               //     country: 'Finland'
-               // },
-               // email: 'a1801032@myy.haaga-helia.fi'
-           // },
-           // deliveryMethod: 'Foodora'
-        //}
-        //axios.post('/orders.json', order)
-        //.then( response => {
-           // this.setState({loading: false, purchasing: false});
-       // })
-       // .catch(error =>{
-         //   this.setState({loading: false, purchasing: false});
-       // });
     }
 
     addIngredientHandler = (type) => {
