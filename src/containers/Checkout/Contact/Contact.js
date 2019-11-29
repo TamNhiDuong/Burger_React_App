@@ -70,15 +70,21 @@ class Contact extends Component {
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ]
                 },
-                value: ''
+                validRules: {
+                    required: true,
+                },
+                value: '',
+                valid: true,
             },
         },
             loading: false, 
+            validForm: false,
     }
     inputValidCheck = (value, rules) => {
         let isValid = true;
         if (rules.required) {
             isValid = value.trim() !== '' && isValid; 
+            console.log('rules', rules)
         }
         if(rules.minLength) {
             isValid = value.length >= rules.minLength && isValid;
@@ -86,8 +92,6 @@ class Contact extends Component {
         if(rules.maxLength) {
             isValid = value.length <= rules.maxLength && isValid;
         }
-
-  
         return isValid; 
     }
 
@@ -122,9 +126,17 @@ class Contact extends Component {
         updatedFormElement.value = event.target.value;
         updatedOrderForm[id] = updatedFormElement; 
         updatedFormElement.valid = this.inputValidCheck(updatedFormElement.value, updatedFormElement.validRules);
-        updatedFormElement.touched = true; 
+        updatedFormElement.touched = true;
         console.log('updatedForm:', updatedFormElement); 
-        this.setState({orderForm: updatedOrderForm}); 
+        
+          //Disable button
+          let validForm = true;
+          for (let id in updatedOrderForm) {
+              validForm = updatedOrderForm[id].valid && validForm;
+          }
+          this.setState({orderForm: updatedOrderForm, validForm: validForm}); 
+          console.log('valid status:', validForm); 
+        this.setState({orderForm: updatedOrderForm, validForm: validForm}); 
     }
   
     render(){
@@ -152,7 +164,7 @@ class Contact extends Component {
                            
                 ))}
              
-                 <Button btnType="Success" >ORDER</Button>
+                 <Button btnType="Success" disabled={!this.state.validForm}>ORDER</Button>
                </form>
         )
         if(this.state.loading) {
