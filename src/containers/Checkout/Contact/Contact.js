@@ -97,9 +97,9 @@ class Contact extends Component {
 
     orderHandler=(event)=> {
         event.preventDefault();
-        console.log('pass data to contact: ', this.props.ingredients, this.props.price); 
+        console.log('pass data to contact: ', this.props, this.props.ingredients, this.props.price); 
         this.setState({loading: true})//Change loading to true as orderSummary is about to be shown
-        //order is data object
+        //order is data object  
         const contactFormInfor = {};
         for (let formElementId in this.state.orderForm ) {
             contactFormInfor[formElementId] = this.state.orderForm[formElementId]; 

@@ -8,6 +8,8 @@ import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner'; 
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
+import * as actionTypes from '../../store/actionTypes'; 
+
 const INGREDIENT_PRICES = {
     salad: 0.5,
     cheese: 0.4,
@@ -156,6 +158,20 @@ class BurgerBuilder extends Component {
             </Aux>
         ); 
     }
-
 }
+// REDUX
+const mapStateToProps = state => {
+    return {
+        ingredientsProps: state.ingredients,
+        totalPriceProps: state.totalPrice,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddIngredients: () => dispatch({ type: actionTypes.ADD_INGREDIENTS}),
+        onRemoveIngredients: () => dispatch({ type: actionTypes.REMOVE_INGREDIENTS}), 
+    }
+}
+
 export default withErrorHandler(BurgerBuilder, axios); 
