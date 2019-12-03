@@ -9,6 +9,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import * as actionTypes from '../../store/actionTypes'; 
+import { connect } from 'react-redux'; 
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -19,8 +20,8 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients: null,
-        totalPrice: 4,
+        //ingredients: null,
+        //totalPrice: 4,
         purchasable: false,
         purchasing: false,
         loading: false, 
@@ -28,20 +29,16 @@ class BurgerBuilder extends Component {
     }
     //Retrieve data from backend
     componentDidMount() {
-        axios.get('https://react-burger-app-d20bc.firebaseio.com/ingredients.json')
-        .then(response => {
-            this.setState( {ingredients: response.data} ); 
-        })
-        .catch(error => {
-            this.setState({error: true});
-    }); 
+        //axios.get('https://react-burger-app-d20bc.firebaseio.com/ingredients.json')
+        //.then(response => {
+          //  this.setState( {ingredients: response.data} ); 
+       // })
+        //.catch(error => {
+          //  this.setState({error: true});
+   // }); 
 }
     updatePurchaseState(ingredients) {
-        //const ingredients = {
-          //  ...this.state.ingredients
-        //};
-        console.log('testing'); 
-        console.log(Object.keys(ingredients));
+        console.log("Object.keys:",Object.keys(ingredients));
         console.log(Object.keys(ingredients).map(igkey => {return ingredients[igkey]}));
         const sum = Object.keys(ingredients)
         .map(igkey => {
@@ -50,7 +47,7 @@ class BurgerBuilder extends Component {
         .reduce((sum, el)=>{
             return sum + el;
         },0);
-        this.setState({purchasable: sum > 0})
+        return sum > 0; 
     }
 
     purchaseHandler = () => {
@@ -77,7 +74,6 @@ class BurgerBuilder extends Component {
     }
 
     addIngredientHandler = (type) => {
-        console.log(type); 
         const oldCount = this.state.ingredients[type];
         const updatedCount = oldCount + 1;
         const updatedIngredients ={
@@ -111,8 +107,12 @@ class BurgerBuilder extends Component {
     
 
     render() {
+        //use for: Internal state
+        //const disabledInfor = {
+          //  ...this.state.ingredients
+        //};
         const disabledInfor = {
-            ...this.state.ingredients
+            ...this.props.ingredientsProps
         };
         //check true/ false, if true then disable the button
         //{salad: true; meat: false,...}
@@ -122,26 +122,26 @@ class BurgerBuilder extends Component {
         let orderSummary =  null; 
         //Having burger when data from backend response, otherwiise app show Spinner
         let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />
-        if (this.state.ingredients) {
+        if (this.props.ingredientsProps) {
             burger = (
             <Aux>
-                <Burger ingredients={this.state.ingredients}/>
+                <Burger ingredients={this.props.ingredientsProps}/>
                 <BuildControls
-                 ingredientAdded={this.addIngredientHandler}
-                 ingredientRemove={this.removeIngredientHandler}
+                 ingredientAdded={this.props.onAddIngredients}
+                 ingredientRemove={this.props.onRemoveIngredients}
                  disabled={disabledInfor}
-                 purchasable={this.state.purchasable}
-                 price={this.state.totalPrice}
+                 purchasable={this.updatePurchaseState(this.props.ingredientsProps)}
+                 price={this.props.totalPriceProps}
                  ordered={this.purchaseHandler}
                  />
             </Aux>
             ); 
             //Burger summary only show when there is response
          orderSummary = <OrderSummary 
-            ingredients= {this.state.ingredients}
+            ingredients= {this.props.ingredientsProps}
             cancelPurchase={this.cancelPurchaseHandler}
             continuePurchase={this.continuePurchaseHandler}
-            price={this.state.totalPrice}
+            price={this.props.totalPriceProps}
             />
         }
         //Show spinner or OrderSummary? False or true?
@@ -169,9 +169,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddIngredients: () => dispatch({ type: actionTypes.ADD_INGREDIENTS}),
-        onRemoveIngredients: () => dispatch({ type: actionTypes.REMOVE_INGREDIENTS}), 
-    }
+        onAddIngredients: (ingType) => dispatch({ type: actionTypes.ADD_INGREDIENTS, ingType: ingType }),
+        onRemoveIngredients: (ingType) => dispatch({ type: actionTypes.REMOVE_INGREDIENTS, ingType: ingType}), 
+    };
 }
 
-export default withErrorHandler(BurgerBuilder, axios); 
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios)); 
