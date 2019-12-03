@@ -5,6 +5,8 @@ import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input'; 
 
+import {connect} from 'react-redux'; 
+
 class Contact extends Component {
     state = {
         orderForm: {
@@ -105,8 +107,8 @@ class Contact extends Component {
             contactFormInfor[formElementId] = this.state.orderForm[formElementId]; 
         }
        const order = {
-            ingredients: this.props.ingredients,
-            price: Number.parseFloat(this.props.price).toFixed(2),
+            ingredients: this.props.ingredientsProps,
+            price: Number.parseFloat(this.props.totalPriceProps).toFixed(2),
             contact: contactFormInfor, 
         }
         //Sending data to Firebase, endpoint: /orders.json. In which 'orders' is random. 
@@ -180,4 +182,10 @@ class Contact extends Component {
         )
     }
 }
-export default Contact; 
+const mapStateToProps = state => {
+    return {
+        ingredientsProps: state.ingredients,
+        totalPriceProps: state.totalPrice,
+    };
+};
+export default connect(mapStateToProps) (Contact); 
