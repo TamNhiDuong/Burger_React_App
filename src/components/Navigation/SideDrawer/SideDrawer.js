@@ -9,7 +9,7 @@ const sideDrawer = (props) => {
     //Then the SideDrawer always open
     //join'' to turn the Array to a single string 
     
-    let attachedClasses = [classes.SideDrawer, classes.Close];
+    let attachedClasses = [classes.SideDrawer, classes.Close];  
     if(props.open) {
         attachedClasses = [classes.SideDrawer, classes.Open]; 
     }

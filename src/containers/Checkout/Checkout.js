@@ -60,8 +60,8 @@ class Checkout extends Component {
 }
 const mapStateToProps = state => {
     return {
-        ingredientsProps: state.ingredients,
-        totalPriceProps: state.totalPrice,
+        ingredientsProps: state.burger.ingredients,
+        totalPriceProps: state.burger.totalPrice,
     };
 };
 export default connect(mapStateToProps)(Checkout); 

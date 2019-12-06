@@ -23,7 +23,7 @@ class Contact extends Component {
                     required: true,
                 }
             },
-            street: {
+        street: {
                 elementType: 'textarea',
                 elementConfig: {
                     type: 'text',
@@ -36,7 +36,7 @@ class Contact extends Component {
                     required: true,
                 }
             },
-            zipCode: {
+        zipCode: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
@@ -51,7 +51,7 @@ class Contact extends Component {
                     maxLength: 5, 
                 }
             },
-            email: {
+        email: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'email',
@@ -64,7 +64,7 @@ class Contact extends Component {
                     required: true,
                 }
             },
-            deliveryMethod: {
+        deliveryMethod: {
                 elementType: 'select',
                 elementConfig: {
                     options: [
@@ -79,8 +79,8 @@ class Contact extends Component {
                 valid: true,
             },
         },
-            loading: false, 
-            validForm: false,
+        loading: false, 
+        validForm: false,
     }
     inputValidCheck = (value, rules) => {
         let isValid = true;
@@ -112,7 +112,7 @@ class Contact extends Component {
             contact: contactFormInfor, 
         }
         //Sending data to Firebase, endpoint: /orders.json. In which 'orders' is random. 
-        axios.post('/orders.json', order)
+        axios.post('/orders.json?auth='+ this.props.token, order)
         .then( response => {
             this.setState({loading: false, purchasing: false});
             this.props.history.push('/'); 
@@ -155,7 +155,7 @@ class Contact extends Component {
             <form onSubmit={this.orderHandler}>
                 
                 {orderFormArray.map(formElement => (
-                    <Input key={formElement.id}
+                    <Input key={formElement.id}  
                            elementType={formElement.config.elementType} 
                            elementConfig={formElement.config.elementConfig}
                            value={formElement.config.value}
@@ -184,8 +184,9 @@ class Contact extends Component {
 }
 const mapStateToProps = state => {
     return {
-        ingredientsProps: state.ingredients,
-        totalPriceProps: state.totalPrice,
+        ingredientsProps: state.burger.ingredients,
+        totalPriceProps: state.burger.totalPrice,
+        token: state.auth.token, 
     };
 };
 export default connect(mapStateToProps) (Contact); 

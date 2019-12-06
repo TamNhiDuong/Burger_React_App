@@ -5,3 +5,9 @@ export {
     fetchFailed
 }
 from './burgerBuilderAction'; 
+
+export {
+    auth,
+    authLogOut
+}
+from './authAction';
