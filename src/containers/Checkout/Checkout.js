@@ -52,7 +52,7 @@ class Checkout extends Component {
                //ingredients={this.state.ingredients}
                //price={this.state.price}
                //{...props}
-               ///>)}/>          
+               ///>)}/>           
     
         )
     }

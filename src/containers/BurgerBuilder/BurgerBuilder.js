@@ -24,7 +24,7 @@ class BurgerBuilder extends Component {
         //totalPrice: 4,
         //purchasable: false,
         purchasing: false,
-        loading: false, 
+        //loading: false, 
         //error: false
     }
     //Retrieve data from backend
@@ -51,6 +51,7 @@ class BurgerBuilder extends Component {
         }
         else{
             this.props.history.push('/auth'); 
+            this.props.onChangeAuthRedirectLink('/checkout'); 
         }
     };
     cancelPurchaseHandler = () => {
@@ -72,6 +73,7 @@ class BurgerBuilder extends Component {
           //  search: '?' + queryString
        // }); 
        this.props.history.push('/checkout'); 
+
     }
 
     //addIngredientHandler = (type) => {
@@ -147,9 +149,9 @@ class BurgerBuilder extends Component {
             />
         }
         //Show spinner or OrderSummary? False or true?
-        if (this.state.loading) {
-            orderSummary = <Spinner/> ; 
-        }
+        // if (this.state.loading) {
+           // orderSummary = <Spinner/> ; 
+        //}
         return (
             <Aux>
                 <Modal show={this.state.purchasing} cancelPurchase={this.cancelPurchaseHandler}>
@@ -175,7 +177,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onAddIngredients: (ingType) => dispatch(actionCreator.addIngredients(ingType)),
         onRemoveIngredients: (ingType) => dispatch(actionCreator.removeIngredients(ingType)), 
-        onFetchIngredients: () => dispatch(actionCreator.initIngredients())
+        onFetchIngredients: () => dispatch(actionCreator.initIngredients()),
+        onChangeAuthRedirectLink: (link) => dispatch(actionCreator.authRedirectLink(link))
     };
 }
 

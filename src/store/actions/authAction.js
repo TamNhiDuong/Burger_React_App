@@ -59,3 +59,10 @@ export const auth = (email, password, isSignup) =>{
            dispatch(authFail(err.response.data.error))
        }); 
     }}
+
+export const authRedirectLink = (link) => {
+    return {
+        type: actionTypes.AUTH_REDIRECT_LINK,
+        link: link, 
+    }
+}

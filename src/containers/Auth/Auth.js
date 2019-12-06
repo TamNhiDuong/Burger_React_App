@@ -79,6 +79,11 @@ class Auth extends Component {
             return {isSignup: !prevState.isSignup};
         })
     }
+    componentDidMount(){
+        if(!this.props.isBuilding && this.props.redirectLink !== '/'){
+            this.props.onChangeAuthRedirectLink('/'); 
+        }
+    }
     render() {
         const formArray = []; 
         for (let key in this.state.form) {
@@ -116,8 +121,9 @@ class Auth extends Component {
 
         let redirect = null;
         if(this.props.isAuthenticated) {
-            redirect = <Redirect to='/'/>
+            redirect = <Redirect to={this.props.redirectLink}/>
         }
+     
 
         return (
             <div className={classes.Auth}>
@@ -137,11 +143,16 @@ const mapStateToProps = state => {
         loading: state.auth.loading, 
         error: state.auth.error, 
         isAuthenticated: state.auth.token !== null, 
+        redirectLink: state.auth.authRedirectLink, 
+        isBuilding: state.burger.isBuilding, 
+
     }
 }
+
 const mapDispatchToProps = dispatch => {
     return {
         onAuth : (email,password, isSignup) => dispatch(actionCreator.auth(email, password, isSignup)),
+        onChangeAuthRedirectLink: (link) => dispatch(actionCreator.authRedirectLink(link)), 
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);  

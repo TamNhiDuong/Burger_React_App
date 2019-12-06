@@ -4,7 +4,8 @@ const initialState = {
     token: null,
     userId: null,
     error: null, 
-    loading: false
+    loading: false,
+    authRedirectLink: '/', 
 }
  const reducer = (state= initialState, action) => {
      switch(action.type){
@@ -20,8 +21,11 @@ const initialState = {
         case actionTypes.AUTH_LOGOUT:
             return updatedObject(state, {token: null, userId: null})
 
+        case actionTypes.AUTH_REDIRECT_LINK:
+            return updatedObject(state, {authRedirectLink: action.link})
+
         default:
-            return state;
+            return state;  
      }
 
      
