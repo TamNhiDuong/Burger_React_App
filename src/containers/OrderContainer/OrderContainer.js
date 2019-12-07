@@ -11,7 +11,8 @@ class OrderContainer extends Component {
         loading: true, 
     }
     componentDidMount(){
-        axios.get('/orders.json?auth='+ this.props.token) 
+        const queryParams = '?auth=' + this.props.token + '&orderBy="userId"&equalTo="' + this.props.userId+ '"';
+        axios.get('/orders.json'+ queryParams)  
         .then(res => {
             console.log('response for order page:', res.data);
             const fetchedDataArray = [];
@@ -45,6 +46,7 @@ class OrderContainer extends Component {
 const mapStateToProps = state => {
     return {
         token: state.auth.token, 
+        userId: state.auth.userId
     }
 }
 export default connect(mapStateToProps)(withErrorHandler(OrderContainer, axios)); 

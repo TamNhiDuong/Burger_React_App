@@ -14,7 +14,7 @@ export const authSuccess = (idToken, localId) => {
         localId: localId, 
     }
 }
-
+ 
 export const authFail = (error) => {
     return {
         type: actionTypes.AUTH_FAIL,

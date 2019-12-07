@@ -110,6 +110,7 @@ class Contact extends Component {
             ingredients: this.props.ingredientsProps,
             price: Number.parseFloat(this.props.totalPriceProps).toFixed(2),
             contact: contactFormInfor, 
+            userId: this.props.userId,
         }
         //Sending data to Firebase, endpoint: /orders.json. In which 'orders' is random. 
         axios.post('/orders.json?auth='+ this.props.token, order)
@@ -187,6 +188,7 @@ const mapStateToProps = state => {
         ingredientsProps: state.burger.ingredients,
         totalPriceProps: state.burger.totalPrice,
         token: state.auth.token, 
+        userId: state.auth.userId, 
     };
 };
 export default connect(mapStateToProps) (Contact); 
