@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
+import {Route, Switch, BrowserRouter, withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
+
 import Layout from './hoc/Layout/Layout'; 
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout'; 
-import {Route, Switch, BrowserRouter} from 'react-router-dom';
 import OrderContainer from './containers/OrderContainer/OrderContainer'; 
 import Auth from './containers/Auth/Auth'; 
 import Logout from './containers/Auth/Logout'; 
+import * as actionCreator from './store/actions/index'; 
 
 
 class App extends Component {
+  componentDidMount(){
+    this.props.onCheckAuthState();  
+  }
   render() {
     
     return (
@@ -30,4 +36,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    onCheckAuthState : () => dispatch(actionCreator.authCheckState()), 
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App);

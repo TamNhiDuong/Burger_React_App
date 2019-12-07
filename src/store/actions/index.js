@@ -9,6 +9,7 @@ from './burgerBuilderAction';
 export {
     auth,
     authLogOut,
-    authRedirectLink
+    authRedirectLink,
+    authCheckState
 }
 from './authAction';
