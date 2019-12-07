@@ -16,15 +16,15 @@ const sideDrawer = (props) => {
     return (
         <Aux>
         <Backdrop show = {props.open} clicked= {props.close}/>
-        <div className={attachedClasses.join(' ')}>
+        <div className={attachedClasses.join(' ')} onClick={props.close}>
         <div className={classes.Logo}>
         <Logo/>
         </div>  
             <nav>
-            <NavigationItems/>
+            <NavigationItems isAuth={props.isAuthenticated}/>
             </nav>
         </div>
         </Aux>
     );
 };
-export default sideDrawer; 
+export default sideDrawer;  

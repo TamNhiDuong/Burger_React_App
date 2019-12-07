@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
+import {Redirect} from 'react-router-dom'; 
+import {connect} from 'react-redux';
+
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import classes from './Auth.module.css';
 import Spinner from '../../components/UI/Spinner/Spinner'; 
-import {Redirect} from 'react-router-dom'; 
-
-import {connect} from 'react-redux';
 import * as actionCreator from '../../store/actions/index'; 
+import {checkValidity} from '../shared/sharedValidation'; 
 
 class Auth extends Component {
     state = {
@@ -49,26 +50,13 @@ class Auth extends Component {
             [id]: {
                 ...this.state.form[id], 
                 value: event.target.value,
-                valid: this.inputValidCheck(event.target.value, this.state.form[id].validRules),
+                valid: checkValidity(event.target.value, this.state.form[id].validRules),
                 touched: true
             }
         };
         this.setState({form: updatedForm})
     }
-    inputValidCheck = (value, rules) => {
-        let isValid = true;
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid; 
-        }
-        if(rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid; 
-        }
-        return isValid; 
-    }
+   
     submitHandler = (event) => {
         //prevent reloading
         event.preventDefault();

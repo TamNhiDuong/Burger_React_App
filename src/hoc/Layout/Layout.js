@@ -23,7 +23,10 @@ class Layout extends Component {
     render() {
         return (
     <Aux>
-        <SideDrawer open={this.state.sideDrawerOpen} close={this.sideDrawerCloseHandler}/>
+        <SideDrawer 
+        open={this.state.sideDrawerOpen} 
+        close={this.sideDrawerCloseHandler}
+        isAuthenticated= {this.props.isAuthenticatedProps} />
         <Toolbar 
         sideDrawerToggleHandler={this.sideDrawerToggleHandler}
         isAuthenticated= {this.props.isAuthenticatedProps}     

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux'; 
+import axios from '../../../axios-orders'; 
+
 import classes from './Contact.module.css'; 
 import Button from '../../../components/UI/Button/Button'; 
-import axios from '../../../axios-orders'; 
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input'; 
-
-import {connect} from 'react-redux'; 
+import {checkValidity} from '../../shared/sharedValidation'; 
 
 class Contact extends Component {
     state = {
@@ -82,20 +83,6 @@ class Contact extends Component {
         loading: false, 
         validForm: false,
     }
-    inputValidCheck = (value, rules) => {
-        let isValid = true;
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid; 
-            console.log('rules', rules)
-        }
-        if(rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if(rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-        return isValid; 
-    }
 
     orderHandler=(event)=> {
         event.preventDefault();
@@ -128,7 +115,7 @@ class Contact extends Component {
 
         updatedFormElement.value = event.target.value;
         updatedOrderForm[id] = updatedFormElement; 
-        updatedFormElement.valid = this.inputValidCheck(updatedFormElement.value, updatedFormElement.validRules);
+        updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validRules);
         updatedFormElement.touched = true;
         console.log('updatedForm:', updatedFormElement); 
         
